@@ -1,0 +1,9 @@
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/admin/partner": "pages/admin/partner.js",
+  "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js",
+  "/": "pages/index.js",
+  "/admin/partner/[...addEdit]": "pages/admin/partner/[...addEdit].js"
+}
