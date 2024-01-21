@@ -9,10 +9,6 @@ import Button from "@/components/ui/Button";
 import InputField from "@/components/ui/Form/Input/InputField";
 import Label from "@/components/ui/Form/Input/InputLabel";
 
-/* UI - ICONS */
-import VisibilityIcon from "@/components/ui/Icons/visibility-icon";
-import VisibilityOffIcon from "@/components/ui/Icons/visibility-off-icon";
-
 import useAppNav from "@/hooks/use-app-nav";
 import useResponsive from "@/hooks/use-check-mobile-screen";
 import {
@@ -27,10 +23,6 @@ import type {
   PartnerCategories,
   PartnerCategoriesType,
 } from "@/types/admin/partner";
-
-import * as crypto from "crypto";
-import { atob } from "buffer";
-import { PaketCategories } from "@/types/admin/paket";
 import { InputSelect } from "@/components/ui";
 import InputUpload from "@/components/ui/Form/Input/InputUpload";
 
@@ -150,9 +142,7 @@ function AddEditPartner() {
         image: data?.image,
         description: data?.description,
         categories: data?.categories,
-        categories_id:
-          categoriesOption?.find((e) => e?.label === data?.categories)?.value ||
-          0,
+        categories_id: data?.categories_id,
       });
 
       const editor = document.getElementById("editor") as HTMLDivElement;
@@ -244,9 +234,9 @@ function AddEditPartner() {
       }
     });
 
-    for (const pair of datas.entries()) {
-      console.log("cek datas", pair[0] + ": " + pair[1]);
-    }
+    // for (const pair of datas.entries()) {
+    //   console.log("cek datas", pair[0] + ": " + pair[1]);
+    // }
     if (type === "add") {
       createPartner.mutate(datas);
     } else {

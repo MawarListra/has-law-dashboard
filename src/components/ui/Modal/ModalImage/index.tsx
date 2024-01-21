@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
 import Button from "../../Button";
@@ -9,6 +9,7 @@ import BadgeSuccessIcon from "../../Icons/badge-success-icon";
 import moment from "moment";
 import KeyboardArrowLeftIcon from "../../Icons/keyboard-arrow-left-icon";
 import CloseIcon from "../../Icons/close-icon";
+import KeyboardArrowRightIcon from "../../Icons/keyboard-arrow-right-icon";
 
 function ModalImage({
   open,
@@ -17,6 +18,8 @@ function ModalImage({
   onCancel,
   data,
 }: ModalImageProps) {
+  const [currImg, setCurrImg] = useState(0);
+
   return (
     <React.Fragment>
       {open && (
@@ -33,12 +36,56 @@ function ModalImage({
                     <CloseIcon />
                   </div>
                 </div>
-                <div className="flex items-center justify-center p-4">
-                  <img
-                    className="contain flex "
-                    style={{ maxHeight: 300 }}
-                    src={data ? `${process.env.NEXT_PUBLIC_API}/${data}` : data}
-                  />
+                <div className="flex flex-row items-center justify-between">
+                  {typeof data !== "string" && (
+                    <div
+                      className="cursor-pointer"
+                      onClick={(e) => {
+                        if (currImg !== 0) {
+                          setCurrImg(currImg - 1);
+                        } else {
+                          e?.preventDefault();
+                        }
+                      }}
+                    >
+                      <KeyboardArrowLeftIcon />
+                    </div>
+                  )}
+                  <div className="flex items-center justify-center p-4">
+                    {typeof data === "string" ? (
+                      <img
+                        className="contain flex "
+                        style={{ maxHeight: 300 }}
+                        src={
+                          data ? `${process.env.NEXT_PUBLIC_API}/${data}` : data
+                        }
+                      />
+                    ) : (
+                      <img
+                        className="contain flex "
+                        style={{ maxHeight: 300 }}
+                        src={
+                          data
+                            ? `${process.env.NEXT_PUBLIC_API}/${data?.[currImg]?.image}`
+                            : data?.[currImg]?.image
+                        }
+                      />
+                    )}
+                  </div>
+                  {typeof data !== "string" && (
+                    <div
+                      className="cursor-pointer"
+                      onClick={(e) => {
+                        if (currImg < data?.length - 1) {
+                          setCurrImg(currImg + 1);
+                        } else {
+                          e?.preventDefault();
+                        }
+                      }}
+                    >
+                      <KeyboardArrowRightIcon />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

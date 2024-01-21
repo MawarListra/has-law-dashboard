@@ -22,15 +22,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/admin/partner": [
+    "/admin/main-services": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/admin/partner.js"
+      "static/chunks/pages/admin/main-services.js"
     ],
-    "/admin/partner/[...addEdit]": [
+    "/admin/main-services/[...addEdit]": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/admin/partner/[...addEdit].js"
+      "static/chunks/pages/admin/main-services/[...addEdit].js"
     ]
   },
   "ampFirstPages": []

@@ -34,6 +34,18 @@ function routes() {
       icon: <GroupIcon />,
       child: [],
     },
+    {
+      name: "Kelola Publikasi",
+      path: "/admin/publication",
+      icon: <ListAltIcon />,
+      child: [],
+    },
+    {
+      name: "Kelola Main Services",
+      path: "/admin/main-services",
+      icon: <GroupIcon />,
+      child: [],
+    },
   ];
 
   /* HALAMAN KARYAWAM */
