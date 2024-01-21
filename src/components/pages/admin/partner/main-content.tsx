@@ -147,10 +147,6 @@ function MainContentPartner() {
         header: "Deskripsi",
         accessorKey: "description",
         cell: ({ row }) => {
-          const data =
-            "Lorem ipsum bsayb habsdu mnbasdgu nabsd<div><br></div><div><br></div><div>habshdgi bsadunn a</div><div>nasbdhj</div><div><br></div><div>nvsahbdak</div>";
-
-          // Function to create a React component from the HTML string
           const createMarkup = (htmlString: any) => ({ __html: htmlString });
 
           return (
@@ -162,7 +158,7 @@ function MainContentPartner() {
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 maxWidth: 500,
-                height: 200,
+                height: 150,
               }}
               dangerouslySetInnerHTML={createMarkup(row?.original?.description)}
             />
@@ -211,7 +207,7 @@ function MainContentPartner() {
 
   /* RENDER */
   return (
-    <div className="flex flex-col gap-y-8 pt-4 md:ml-4 md:mr-0">
+    <div className="flex h-full flex-col gap-y-8 pt-4 md:ml-4 md:mr-0">
       <div className="grid gap-4 md:flex">
         <div className="md:flex-grow">
           <InputSearch
@@ -238,7 +234,7 @@ function MainContentPartner() {
         </div>
       </div>
 
-      <div>
+      <div className="flex w-full" style={{ overflow: "scroll" }}>
         <Table columns={columns} data={dataState} />
       </div>
 

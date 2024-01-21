@@ -216,7 +216,7 @@ function MainContentMainServices() {
 
   /* RENDER */
   return (
-    <div className="flex flex-col gap-y-8 pt-4 md:ml-4 md:mr-0">
+    <div className="flex h-full flex-col gap-y-8 pt-4 md:ml-4 md:mr-0">
       <div className="grid gap-4 md:flex">
         <div className="md:flex-grow">
           <InputSearch
@@ -236,7 +236,7 @@ function MainContentMainServices() {
               iconLeft={<AddCircleIcon color="white" />}
               rounded
               fit
-              // disabled={dataState?.length === 2}
+              disabled={dataState?.length === 2}
             >
               Tambah Main Services
             </Button>
@@ -244,7 +244,7 @@ function MainContentMainServices() {
         </div>
       </div>
 
-      <div>
+      <div className="flex w-full" style={{ overflow: "scroll" }}>
         <Table columns={columns} data={dataState} />
       </div>
 

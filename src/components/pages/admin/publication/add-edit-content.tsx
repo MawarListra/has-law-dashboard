@@ -252,7 +252,7 @@ function AddEditPublication() {
         />
       </div>
 
-      <div className="md:mx-4 md:w-3/4">
+      <div className="w-full md:mx-4" style={{ overflow: "scroll" }}>
         <form
           className="flex w-full flex-col gap-4"
           onSubmit={formikPublication.handleSubmit}
@@ -297,7 +297,7 @@ function AddEditPublication() {
               contentEditable={true}
               style={{
                 width: "100%",
-                minHeight: 500,
+                minHeight: 300,
                 border: "1px solid #ccc",
                 padding: 4,
                 boxSizing: "border-box",

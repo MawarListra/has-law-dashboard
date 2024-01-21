@@ -253,7 +253,7 @@ function AddEditMainServices() {
         />
       </div>
 
-      <div className="md:mx-4 md:w-3/4">
+      <div className="w-full md:mx-4" style={{ overflow: "scroll" }}>
         <form
           className="flex w-full flex-col gap-4"
           onSubmit={formikMainServices.handleSubmit}

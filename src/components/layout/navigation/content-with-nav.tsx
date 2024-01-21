@@ -29,7 +29,7 @@ function ContentWithNav(props: Props) {
 
   const [toogleSidebar, setToogleSidebar] = React.useState(false);
   return (
-    <div className="relative flex max-h-fit gap-4 md:min-h-screen">
+    <div className="relative flex h-screen gap-4">
       <div
         className={`relative w-72 translate-x-0 bg-white sidebar:absolute sidebar:inset-y-0 sidebar:left-0 sidebar:z-20 ${
           !toogleSidebar
@@ -73,7 +73,7 @@ function ContentWithNav(props: Props) {
       </div>
 
       {/* MAIN CONTENT */}
-      <div className="min-w-0 flex-1 text-ui-gray-blue-60 md:pr-2">
+      <div className="h-screen min-w-0 flex-1 text-ui-gray-blue-60 md:pr-2">
         {!path.includes("point-of-sales") && (
           <header className="flex h-20 flex-row items-center gap-4 border-b-2 border-solid border-ui-gray-blue-90">
             <span className="ml-4 flex text-ui-gray-blue-80 md:hidden">
@@ -108,7 +108,7 @@ function ContentWithNav(props: Props) {
             </div>
           </header>
         )}
-        <main className="mx-4 pb-4 md:mx-0">{children}</main>
+        <main className="mx-4 h-full pb-4 md:mx-0">{children}</main>
       </div>
 
       {/* OVERLAY SAAT SDEBAR TERBUKA (MOBILE ONLY) */}

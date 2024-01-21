@@ -21,7 +21,7 @@ function Layout(props: LayoutProps) {
 
   return (
     <React.Fragment>
-      <div className="container mx-auto w-screen">
+      <div className="container mx-auto h-screen w-screen">
         {parentPath === "/login" ||
         // ||
         // parentPath === "/test" ||

@@ -330,7 +330,7 @@ function AddEditServices({ services_id = "", main_services_id = "" }) {
               contentEditable={true}
               style={{
                 width: "100%",
-                minHeight: 500,
+                minHeight: 300,
                 border: "1px solid #ccc",
                 padding: 4,
                 boxSizing: "border-box",
