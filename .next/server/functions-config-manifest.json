@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "functions": {
+    "/api/auth/[...nextauth]": {},
+    "/admin": {},
+    "/admin/main-services": {},
+    "/admin/main-services/[...addEdit]": {},
+    "/admin/partner/[...addEdit]": {},
+    "/admin/partner": {},
+    "/admin/publication": {},
+    "/admin/services": {},
+    "/admin/services/[...addEdit]": {},
+    "/": {},
+    "/karyawan": {},
+    "/admin/publication/[...addEdit]": {},
+    "/login": {}
+  }
+}

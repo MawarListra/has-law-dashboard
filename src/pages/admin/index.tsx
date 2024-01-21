@@ -5,7 +5,6 @@ import { useSession } from "next-auth/react";
 // import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 import useAppNav from "@/hooks/use-app-nav";
-import { ApiGetOneMemberCheckIn } from "@/hooks/use-fetch";
 
 // import type { GetServerSideProps } from "next";
 
