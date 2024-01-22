@@ -228,7 +228,7 @@ function MainContentPartner() {
               rounded
               fit
             >
-              Tambah Kategori
+              Tambah Partner
             </Button>
           </Link>
         </div>

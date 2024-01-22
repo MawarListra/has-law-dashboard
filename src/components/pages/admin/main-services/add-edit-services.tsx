@@ -18,15 +18,20 @@ import {
 } from "@/hooks/use-fetch";
 
 import InputUpload from "@/components/ui/Form/Input/InputUpload";
-import Image from "next/image";
-import DeleteIcon from "@/components/ui/Icons/delete-icon";
-import { ButtonIcon } from "@/components/ui";
 import { Services, ServicesType } from "@/types/admin/services";
 import useDebounce from "@/hooks/use-debounce";
 import { PaginationType } from "@/components/ui/Pagination/types";
 import { TAppState } from "@/types/global";
 import { TTableType } from "@/components/ui/Table";
-import getIndexTable from "@/libs/get-index-table";
+import {
+  EditorState,
+  ContentState,
+  convertFromHTML,
+  ContentBlock,
+} from "draft-js";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { stateToHTML } from "draft-js-export-html";
+const dynamicImportEditor = () => import("react-draft-wysiwyg");
 
 type HandleChangeValueType = string | number | null | undefined | any;
 type HandleChangeNameType = string;
@@ -46,6 +51,12 @@ function AddEditServices({ services_id = "", main_services_id = "" }) {
 
   const type = slug[0];
   const id = slug[1];
+
+  const [Editor, setEditor] = useState<any>(null);
+
+  useEffect(() => {
+    dynamicImportEditor().then((module) => setEditor(module.Editor));
+  }, []);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [tempImg, setTempImg] = useState("");
@@ -81,6 +92,16 @@ function AddEditServices({ services_id = "", main_services_id = "" }) {
 
       await addEditServices(values);
     },
+  });
+
+  const [editorState, setEditorState] = useState(() => {
+    const htmlContent = formikServices?.values?.description || "";
+
+    const contentBlocksArray: ContentBlock[] =
+      convertFromHTML(htmlContent).contentBlocks;
+    const contentState = ContentState.createFromBlockArray(contentBlocksArray);
+
+    return EditorState.createWithContent(contentState);
   });
 
   const handleChange = (
@@ -133,29 +154,18 @@ function AddEditServices({ services_id = "", main_services_id = "" }) {
         main_services_id: data?.main_services_id,
       });
 
-      const editor = document.getElementById("editor") as HTMLDivElement;
+      const htmlContent = data?.description || "";
 
-      // Load text from formikServices.values.description
-      const savedText = data?.description;
-
-      if (savedText) {
-        editor.innerHTML = savedText;
-      }
+      const contentBlocksArray: ContentBlock[] =
+        convertFromHTML(htmlContent).contentBlocks;
+      const contentState =
+        ContentState.createFromBlockArray(contentBlocksArray);
+      setEditorState(EditorState.createWithContent(contentState));
     },
     onError(err) {
       console.error(err);
     },
   });
-
-  React.useLayoutEffect(() => {
-    const editor = document.getElementById("editor") as HTMLDivElement;
-
-    // Save text to formikPartner.values.description on input
-    editor.addEventListener("input", () => {
-      const text = editor.innerHTML;
-      formikServices?.setFieldValue("description", text);
-    });
-  }, []);
 
   React.useEffect(() => {
     if (type === "services-edit") getOneServices.refetch();
@@ -325,18 +335,54 @@ function AddEditServices({ services_id = "", main_services_id = "" }) {
               <sup className="font-black text-ui-red">*</sup>
             </Label>
 
-            <div
-              id="editor"
-              contentEditable={true}
-              style={{
-                width: "100%",
-                minHeight: 300,
-                border: "1px solid #ccc",
-                padding: 4,
-                boxSizing: "border-box",
-                backgroundColor: "white",
-              }}
-            ></div>
+            {Editor && (
+              <Editor
+                editorState={editorState}
+                onEditorStateChange={(newState: any) => {
+                  setEditorState(newState);
+                  console.log("cek newState", newState);
+
+                  // Convert EditorState content to HTML
+                  const contentState = newState.getCurrentContent();
+                  const htmlContent = stateToHTML(contentState);
+
+                  // Set the HTML content to formikPartner
+                  formikServices.setFieldValue("description", htmlContent);
+                }}
+                toolbar={{
+                  options: [
+                    "inline",
+                    "blockType",
+                    "list",
+                    "textAlign",
+                    "history",
+                  ],
+                  inline: {
+                    options: ["bold", "italic", "underline", "strikethrough"],
+                  },
+                  blockType: {
+                    options: [
+                      "Normal",
+                      "H1",
+                      "H2",
+                      "H3",
+                      "H4",
+                      "H5",
+                      "H6",
+                      "Blockquote",
+                    ],
+                  },
+                  list: {
+                    options: ["unordered", "ordered"],
+                  },
+                }}
+                wrapperStyle={{
+                  backgroundColor: "white",
+                  maxHeight: 300,
+                  overflow: "scroll",
+                }}
+              />
+            )}
           </div>
 
           <div className="flex w-full md:flex">

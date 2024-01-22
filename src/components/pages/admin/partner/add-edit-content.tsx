@@ -25,6 +25,15 @@ import type {
 } from "@/types/admin/partner";
 import { InputSelect } from "@/components/ui";
 import InputUpload from "@/components/ui/Form/Input/InputUpload";
+import {
+  EditorState,
+  ContentState,
+  convertFromHTML,
+  ContentBlock,
+} from "draft-js";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { stateToHTML } from "draft-js-export-html";
+const dynamicImportEditor = () => import("react-draft-wysiwyg");
 
 type HandleChangeValueType = string | number | null | undefined | any;
 type HandleChangeNameType = string;
@@ -42,7 +51,12 @@ function AddEditPartner() {
   const type = slug[0];
   const id = slug[1];
 
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [Editor, setEditor] = useState<any>(null);
+
+  useEffect(() => {
+    dynamicImportEditor().then((module) => setEditor(module.Editor));
+  }, []);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [categoriesOption, setCategoriesOption] = useState([
     {
@@ -68,6 +82,16 @@ function AddEditPartner() {
 
       await addEditPartner(values);
     },
+  });
+
+  const [editorState, setEditorState] = useState(() => {
+    const htmlContent = formikPartner?.values?.description || "";
+
+    const contentBlocksArray: ContentBlock[] =
+      convertFromHTML(htmlContent).contentBlocks;
+    const contentState = ContentState.createFromBlockArray(contentBlocksArray);
+
+    return EditorState.createWithContent(contentState);
   });
 
   const handleChange = (
@@ -145,14 +169,13 @@ function AddEditPartner() {
         categories_id: data?.categories_id,
       });
 
-      const editor = document.getElementById("editor") as HTMLDivElement;
+      const htmlContent = data?.description || "";
 
-      // Load text from formikPartner.values.description
-      const savedText = data?.description;
-
-      if (savedText) {
-        editor.innerHTML = savedText;
-      }
+      const contentBlocksArray: ContentBlock[] =
+        convertFromHTML(htmlContent).contentBlocks;
+      const contentState =
+        ContentState.createFromBlockArray(contentBlocksArray);
+      setEditorState(EditorState.createWithContent(contentState));
     },
     onError(err) {
       console.error(err);
@@ -244,20 +267,6 @@ function AddEditPartner() {
     }
   };
 
-  React.useLayoutEffect(() => {
-    const editor = document.getElementById("editor") as HTMLDivElement;
-
-    // Save text to formikPartner.values.description on input
-    editor.addEventListener("input", () => {
-      const text = editor.innerHTML;
-      formikPartner?.setFieldValue("description", text);
-    });
-  }, []);
-
-  useEffect(() => {
-    console.log("cek formikPartner", formikPartner?.values);
-  }, [formikPartner]);
-
   /* RENDER */
   return (
     <React.Fragment>
@@ -265,11 +274,11 @@ function AddEditPartner() {
         <Breadcrumb
           item={[
             {
-              title: "Kelola Kategori Partner",
+              title: "Kelola Partner",
               linkTo: "/admin/partner",
             },
             {
-              title: type === "add" ? "Tambah Kategori" : "Edit Kategori",
+              title: type === "add" ? "Tambah Partner" : "Edit Partner",
               active: true,
             },
           ]}
@@ -333,19 +342,53 @@ function AddEditPartner() {
               Deskripsi&nbsp;
               <sup className="font-black text-ui-red">*</sup>
             </Label>
+            {Editor && (
+              <Editor
+                editorState={editorState}
+                onEditorStateChange={(newState: any) => {
+                  setEditorState(newState);
 
-            <div
-              id="editor"
-              contentEditable={true}
-              style={{
-                width: "100%",
-                minHeight: 300,
-                border: "1px solid #ccc",
-                padding: 4,
-                boxSizing: "border-box",
-                backgroundColor: "white",
-              }}
-            ></div>
+                  // Convert EditorState content to HTML
+                  const contentState = newState.getCurrentContent();
+                  const htmlContent = stateToHTML(contentState);
+
+                  // Set the HTML content to formikPartner
+                  formikPartner.setFieldValue("description", htmlContent);
+                }}
+                toolbar={{
+                  options: [
+                    "inline",
+                    "blockType",
+                    "list",
+                    "textAlign",
+                    "history",
+                  ],
+                  inline: {
+                    options: ["bold", "italic", "underline", "strikethrough"],
+                  },
+                  blockType: {
+                    options: [
+                      "Normal",
+                      "H1",
+                      "H2",
+                      "H3",
+                      "H4",
+                      "H5",
+                      "H6",
+                      "Blockquote",
+                    ],
+                  },
+                  list: {
+                    options: ["unordered", "ordered"],
+                  },
+                }}
+                wrapperStyle={{
+                  backgroundColor: "white",
+                  maxHeight: 300,
+                  overflow: "scroll",
+                }}
+              />
+            )}
           </div>
 
           <div className="flex w-full md:flex">

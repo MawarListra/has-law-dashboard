@@ -119,15 +119,6 @@ function AddEditMainServices() {
         photo: data?.image,
         image: data?.image,
       });
-
-      const editor = document.getElementById("editor") as HTMLDivElement;
-
-      // Load text from formikMainServices.values.description
-      const savedText = data?.description;
-
-      if (savedText) {
-        editor.innerHTML = savedText;
-      }
     },
     onError(err) {
       console.error(err);

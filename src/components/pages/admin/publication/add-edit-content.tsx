@@ -9,10 +9,6 @@ import Button from "@/components/ui/Button";
 import InputField from "@/components/ui/Form/Input/InputField";
 import Label from "@/components/ui/Form/Input/InputLabel";
 
-/* UI - ICONS */
-import VisibilityIcon from "@/components/ui/Icons/visibility-icon";
-import VisibilityOffIcon from "@/components/ui/Icons/visibility-off-icon";
-
 import useAppNav from "@/hooks/use-app-nav";
 import useResponsive from "@/hooks/use-check-mobile-screen";
 import {
@@ -25,6 +21,15 @@ import type { Publication } from "@/types/admin/publication";
 
 import { InputSelect } from "@/components/ui";
 import InputUpload from "@/components/ui/Form/Input/InputUpload";
+import {
+  EditorState,
+  ContentState,
+  convertFromHTML,
+  ContentBlock,
+} from "draft-js";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { stateToHTML } from "draft-js-export-html";
+const dynamicImportEditor = () => import("react-draft-wysiwyg");
 
 type HandleChangeValueType = string | number | null | undefined | any;
 type HandleChangeNameType = string;
@@ -36,13 +41,16 @@ type HandleChangeType = {
 function AddEditPublication() {
   const { slug, NextRouter } = useAppNav();
   const isMobile = useResponsive();
-  // const secretKey = "supersecretkey";
-  // const CryptoJS = require("crypto-js");
 
   const type = slug[0];
   const id = slug[1];
 
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [Editor, setEditor] = useState<any>(null);
+
+  useEffect(() => {
+    dynamicImportEditor().then((module) => setEditor(module.Editor));
+  }, []);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formikPublication = useFormik<Publication>({
@@ -62,6 +70,16 @@ function AddEditPublication() {
 
       await addEditPublication(values);
     },
+  });
+
+  const [editorState, setEditorState] = useState(() => {
+    const htmlContent = formikPublication?.values?.description || "";
+
+    const contentBlocksArray: ContentBlock[] =
+      convertFromHTML(htmlContent).contentBlocks;
+    const contentState = ContentState.createFromBlockArray(contentBlocksArray);
+
+    return EditorState.createWithContent(contentState);
   });
 
   const handleChange = (
@@ -115,14 +133,13 @@ function AddEditPublication() {
         updatedAt: data?.updatedAt,
       });
 
-      const editor = document.getElementById("editor") as HTMLDivElement;
+      const htmlContent = data?.description || "";
 
-      // Load text from formikPublication.values.description
-      const savedText = data?.description;
-
-      if (savedText) {
-        editor.innerHTML = savedText;
-      }
+      const contentBlocksArray: ContentBlock[] =
+        convertFromHTML(htmlContent).contentBlocks;
+      const contentState =
+        ContentState.createFromBlockArray(contentBlocksArray);
+      setEditorState(EditorState.createWithContent(contentState));
     },
     onError(err) {
       console.error(err);
@@ -219,16 +236,6 @@ function AddEditPublication() {
     }
   };
 
-  React.useLayoutEffect(() => {
-    const editor = document.getElementById("editor") as HTMLDivElement;
-
-    // Save text to formikPublication.values.description on input
-    editor.addEventListener("input", () => {
-      const text = editor.innerHTML;
-      formikPublication?.setFieldValue("description", text);
-    });
-  }, []);
-
   useEffect(() => {
     console.log("cek formikPublication", formikPublication?.values);
   }, [formikPublication]);
@@ -291,19 +298,54 @@ function AddEditPublication() {
               Deskripsi&nbsp;
               <sup className="font-black text-ui-red">*</sup>
             </Label>
+            {Editor && (
+              <Editor
+                editorState={editorState}
+                onEditorStateChange={(newState: any) => {
+                  setEditorState(newState);
+                  console.log("cek newState", newState);
 
-            <div
-              id="editor"
-              contentEditable={true}
-              style={{
-                width: "100%",
-                minHeight: 300,
-                border: "1px solid #ccc",
-                padding: 4,
-                boxSizing: "border-box",
-                backgroundColor: "white",
-              }}
-            ></div>
+                  // Convert EditorState content to HTML
+                  const contentState = newState.getCurrentContent();
+                  const htmlContent = stateToHTML(contentState);
+
+                  // Set the HTML content to formikPartner
+                  formikPublication.setFieldValue("description", htmlContent);
+                }}
+                toolbar={{
+                  options: [
+                    "inline",
+                    "blockType",
+                    "list",
+                    "textAlign",
+                    "history",
+                  ],
+                  inline: {
+                    options: ["bold", "italic", "underline", "strikethrough"],
+                  },
+                  blockType: {
+                    options: [
+                      "Normal",
+                      "H1",
+                      "H2",
+                      "H3",
+                      "H4",
+                      "H5",
+                      "H6",
+                      "Blockquote",
+                    ],
+                  },
+                  list: {
+                    options: ["unordered", "ordered"],
+                  },
+                }}
+                wrapperStyle={{
+                  backgroundColor: "white",
+                  maxHeight: 300,
+                  overflow: "scroll",
+                }}
+              />
+            )}
           </div>
 
           <div className="flex w-full md:flex">
