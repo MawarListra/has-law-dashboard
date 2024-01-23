@@ -267,9 +267,9 @@ function AddEditMainServices() {
       setIsSubmitting(false);
       return alert("Silahkan upload foto baru");
     }
-    for (const pair of datas.entries()) {
-      console.log("cek datas", pair[0] + ": " + pair[1]);
-    }
+    // for (const pair of datas.entries()) {
+    //   console.log("cek datas", pair[0] + ": " + pair[1]);
+    // }
 
     if (type === "add") {
       createMainServices.mutate(datas);
