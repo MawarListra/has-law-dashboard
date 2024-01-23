@@ -161,7 +161,7 @@ function AddEditMainServices() {
   // [PUT] MainServices
   const updateMainServices = ApiPutMainServices({
     onSuccess() {
-      alert("Berhasil mengubah Data Publikasi");
+      alert("Berhasil mengubah Data Main Services");
       NextRouter.replace("/admin/main-services");
       formikMainServices.setSubmitting(false);
       setIsSubmitting(false);
@@ -191,27 +191,85 @@ function AddEditMainServices() {
     formikMainServices.setSubmitting(true);
     setIsSubmitting(true);
     const datas = new FormData();
-    formikMainServices.values.photo.forEach((v: any, i: number) => {
-      datas.append(`photo`, v, `image${i + 1}.png`);
-    });
     Object.entries(payload).forEach(([el, value]) => {
-      if (value != null) {
+      if (payload?.[el] != null || payload?.[el] === "") {
         if (type === "add") {
           if (el !== "image" && el !== "deleted" && el !== "photo") {
-            datas.set(el, value);
+            datas.set(el, payload?.[el]);
+          }
+          if (el === "photo") {
+            payload?.[el]?.forEach((v: any, i: number) => {
+              datas.append(`photo`, v, `image${i + 1}.png`);
+            });
           }
         }
         if (type === "edit") {
-          if (el !== "image" && el !== "photo") {
-            datas.set(el, value);
+          if (el !== "image" && el !== "photo" && el !== "deleted") {
+            datas.set(el, payload?.[el]);
+          }
+          if (el === "deleted" && payload?.[el]?.length > 0) {
+            payload?.[el]?.forEach((v: any, i: number) => {
+              datas.set(`deleted[${i}]`, v);
+            });
           }
         }
+
+        if (el === "photo" && formikMainServices.values.photo) {
+          formikMainServices.values.photo.forEach((v: any, i: number) => {
+            console.log("cek v", v, typeof v);
+            if (v instanceof Blob || v instanceof File) {
+              datas.append(`photo`, v, `image${i + 1}.png`);
+            }
+          });
+        }
+      } else {
+        setIsSubmitting(false);
+        return alert("Silahkan lengkapi data anda!");
       }
     });
 
-    // for (const pair of datas.entries()) {
-    //   console.log("cek datas", pair[0] + ": " + pair[1]);
-    // }
+    function doesNotContainBlob(
+      array: (
+        | string
+        | File
+        | {
+            id: number;
+            image: string | File;
+            index: any;
+            rowstatus: boolean;
+            main_services_id: number;
+            createdAt: string;
+            updatedAt: string;
+          }
+      )[]
+    ) {
+      return (
+        Array.isArray(array) &&
+        !array.some((element) => {
+          if (typeof element === "string") {
+            return false; // String is not a Blob
+          } else if (element instanceof File) {
+            return true; // File is a Blob
+          } else {
+            // Handle the case where element is an object
+            // You might need to adjust this based on your actual data structure
+            return element.image instanceof File;
+          }
+        })
+      );
+    }
+
+    // Example usage:
+    if (
+      doesNotContainBlob(formikMainServices.values.photo) &&
+      formikMainServices.values.deleted.length > 0
+    ) {
+      setIsSubmitting(false);
+      return alert("Silahkan upload foto baru");
+    }
+    for (const pair of datas.entries()) {
+      console.log("cek datas", pair[0] + ": " + pair[1]);
+    }
 
     if (type === "add") {
       createMainServices.mutate(datas);
@@ -251,7 +309,7 @@ function AddEditMainServices() {
         >
           <div>
             <Label htmlFor="nama">
-              Judul Publikasi&nbsp;
+              Judul Main Services&nbsp;
               <sup className="font-black text-ui-red">*</sup>
             </Label>
             <InputField

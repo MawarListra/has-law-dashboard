@@ -1,19 +1,9 @@
 {
-  "/_document": "pages/_document.js",
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
-  "/test/button": "pages/test/button.html",
-  "/test/input": "pages/test/input.html",
-  "/admin/main-services": "pages/admin/main-services.html",
-  "/admin/partner/[...addEdit]": "pages/admin/partner/[...addEdit].html",
-  "/admin/partner": "pages/admin/partner.html",
-  "/admin/publication/[...addEdit]": "pages/admin/publication/[...addEdit].html",
-  "/": "pages/index.html",
-  "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js",
-  "/karyawan": "pages/karyawan.html",
-  "/login": "pages/login.html",
-  "/admin": "pages/admin.html",
-  "/admin/main-services/[...addEdit]": "pages/admin/main-services/[...addEdit].html",
-  "/admin/publication": "pages/admin/publication.html",
-  "/404": "pages/404.html"
+  "/_document": "pages/_document.js",
+  "/admin/partner": "pages/admin/partner.js",
+  "/admin/main-services": "pages/admin/main-services.js",
+  "/admin/main-services/[...addEdit]": "pages/admin/main-services/[...addEdit].js",
+  "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js"
 }
