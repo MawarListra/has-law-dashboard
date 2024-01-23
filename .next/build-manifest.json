@@ -31,6 +31,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/admin/main-services/[...addEdit].js"
+    ],
+    "/admin/partner": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/admin/partner.js"
+    ],
+    "/admin/partner/[...addEdit]": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/admin/partner/[...addEdit].js"
     ]
   },
   "ampFirstPages": []

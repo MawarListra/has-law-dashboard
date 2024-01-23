@@ -31,7 +31,8 @@ import {
 } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { stateToHTML } from "draft-js-export-html";
-const dynamicImportEditor = () => import("react-draft-wysiwyg");
+// const dynamicImportEditor = () => import("react-draft-wysiwyg");
+import { Editor } from "react-draft-wysiwyg";
 
 type HandleChangeValueType = string | number | null | undefined | any;
 type HandleChangeNameType = string;
@@ -52,11 +53,11 @@ function AddEditServices({ services_id = "", main_services_id = "" }) {
   const type = slug[0];
   const id = slug[1];
 
-  const [Editor, setEditor] = useState<any>(null);
+  // const [Editor, setEditor] = useState<any>(null);
 
-  useEffect(() => {
-    dynamicImportEditor().then((module) => setEditor(module.Editor));
-  }, []);
+  // useEffect(() => {
+  //   dynamicImportEditor().then((module) => setEditor(module.Editor));
+  // }, []);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [tempImg, setTempImg] = useState("");

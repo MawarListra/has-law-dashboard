@@ -2,8 +2,9 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
+  "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js",
   "/admin/partner": "pages/admin/partner.js",
+  "/admin/partner/[...addEdit]": "pages/admin/partner/[...addEdit].js",
   "/admin/main-services": "pages/admin/main-services.js",
-  "/admin/main-services/[...addEdit]": "pages/admin/main-services/[...addEdit].js",
-  "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js"
+  "/admin/main-services/[...addEdit]": "pages/admin/main-services/[...addEdit].js"
 }
