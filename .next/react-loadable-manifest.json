@@ -1,1 +1,20 @@
-{}
+{
+  "../components/pages/admin/main-services/add-edit-services.tsx -> react-draft-wysiwyg": {
+    "id": 9521,
+    "files": [
+      "static/chunks/2c386607.86633a3f0298423c.js"
+    ]
+  },
+  "../components/pages/admin/partner/add-edit-content.tsx -> react-draft-wysiwyg": {
+    "id": 9521,
+    "files": [
+      "static/chunks/2c386607.86633a3f0298423c.js"
+    ]
+  },
+  "../components/pages/admin/publication/add-edit-content.tsx -> react-draft-wysiwyg": {
+    "id": 9521,
+    "files": [
+      "static/chunks/2c386607.86633a3f0298423c.js"
+    ]
+  }
+}

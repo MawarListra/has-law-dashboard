@@ -33,8 +33,14 @@ import {
 } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { stateToHTML } from "draft-js-export-html";
-// const dynamicImportEditor = () => import("react-draft-wysiwyg");
-import { Editor } from "react-draft-wysiwyg";
+import dynamic from "next/dynamic";
+
+const dynamicEditorLoader = () =>
+  import("react-draft-wysiwyg").then((module) => module.Editor);
+
+const DynamicEditor = dynamic(dynamicEditorLoader, {
+  ssr: false,
+});
 
 type HandleChangeValueType = string | number | null | undefined | any;
 type HandleChangeNameType = string;
@@ -343,53 +349,53 @@ function AddEditPartner() {
               Deskripsi&nbsp;
               <sup className="font-black text-ui-red">*</sup>
             </Label>
-            {Editor && (
-              <Editor
-                editorState={editorState}
-                onEditorStateChange={(newState: any) => {
-                  setEditorState(newState);
+            {/* {Editor && ( */}
+            <DynamicEditor
+              editorState={editorState}
+              onEditorStateChange={(newState: any) => {
+                setEditorState(newState);
 
-                  // Convert EditorState content to HTML
-                  const contentState = newState.getCurrentContent();
-                  const htmlContent = stateToHTML(contentState);
+                // Convert EditorState content to HTML
+                const contentState = newState.getCurrentContent();
+                const htmlContent = stateToHTML(contentState);
 
-                  // Set the HTML content to formikPartner
-                  formikPartner.setFieldValue("description", htmlContent);
-                }}
-                toolbar={{
+                // Set the HTML content to formikPartner
+                formikPartner.setFieldValue("description", htmlContent);
+              }}
+              toolbar={{
+                options: [
+                  "inline",
+                  "blockType",
+                  "list",
+                  "textAlign",
+                  "history",
+                ],
+                inline: {
+                  options: ["bold", "italic", "underline", "strikethrough"],
+                },
+                blockType: {
                   options: [
-                    "inline",
-                    "blockType",
-                    "list",
-                    "textAlign",
-                    "history",
+                    "Normal",
+                    "H1",
+                    "H2",
+                    "H3",
+                    "H4",
+                    "H5",
+                    "H6",
+                    "Blockquote",
                   ],
-                  inline: {
-                    options: ["bold", "italic", "underline", "strikethrough"],
-                  },
-                  blockType: {
-                    options: [
-                      "Normal",
-                      "H1",
-                      "H2",
-                      "H3",
-                      "H4",
-                      "H5",
-                      "H6",
-                      "Blockquote",
-                    ],
-                  },
-                  list: {
-                    options: ["unordered", "ordered"],
-                  },
-                }}
-                wrapperStyle={{
-                  backgroundColor: "white",
-                  maxHeight: 300,
-                  overflow: "scroll",
-                }}
-              />
-            )}
+                },
+                list: {
+                  options: ["unordered", "ordered"],
+                },
+              }}
+              wrapperStyle={{
+                backgroundColor: "white",
+                maxHeight: 300,
+                overflow: "scroll",
+              }}
+            />
+            {/* )} */}
           </div>
 
           <div className="flex w-full md:flex">
