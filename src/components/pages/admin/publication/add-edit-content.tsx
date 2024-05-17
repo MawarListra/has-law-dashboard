@@ -306,6 +306,9 @@ function AddEditPublication() {
             </Label>
             {/* {Editor && ( */}
             <DynamicEditor
+              editorStyle={{
+                fontWeight: 400,
+              }}
               editorState={editorState}
               onEditorStateChange={(newState: any) => {
                 setEditorState(newState);

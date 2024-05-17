@@ -7,7 +7,7 @@ const nextConfig = {
     version,
   },
   images: {
-    domains: ["has.chicodeapi.xyz"],
+    domains: ["has.chicodeapi.xyz", "api.has-law.com"],
   },
 };
 

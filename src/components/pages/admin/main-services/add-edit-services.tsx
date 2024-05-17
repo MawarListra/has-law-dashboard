@@ -343,6 +343,9 @@ function AddEditServices({ services_id = "", main_services_id = "" }) {
 
             {/* {Editor && ( */}
             <DynamicEditor
+              editorStyle={{
+                fontWeight: 400,
+              }}
               editorState={editorState}
               onEditorStateChange={(newState: any) => {
                 setEditorState(newState);
